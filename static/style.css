@@ -1,0 +1,422 @@
+/* ============================================================
+   1. 登录界面美化
+   ============================================================ */
+
+/* 背景渐变 */
+body {
+    background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+    min-height: 100vh;
+    position: relative;
+}
+
+/* 浮动装饰元素容器 */
+.floating-elements {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-star,
+.floating-cloud,
+.floating-rainbow,
+.floating-heart {
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.6;
+    animation: floatUp 12s infinite ease-in-out;
+}
+
+.floating-star:nth-child(1) { left: 10%; animation-delay: 0s; font-size: 3rem; }
+.floating-star:nth-child(2) { right: 15%; animation-delay: 4s; font-size: 2rem; }
+.floating-cloud:nth-child(3) { left: 5%; top: 20%; animation-delay: 2s; font-size: 4rem; opacity: 0.3; }
+.floating-cloud:nth-child(4) { right: 8%; top: 60%; animation-delay: 6s; font-size: 3.5rem; opacity: 0.25; }
+.floating-rainbow { left: 20%; top: 70%; animation-delay: 3s; font-size: 3rem; }
+.floating-heart { right: 25%; top: 30%; animation-delay: 5s; font-size: 2.8rem; }
+
+@keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+    50% { transform: translateY(-80px) rotate(10deg); opacity: 0.8; }
+    100% { transform: translateY(0) rotate(0deg); opacity: 0.4; }
+}
+
+/* 登录卡片升级 */
+.auth-container {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 32px !important;
+    padding: 40px 36px !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset !important;
+    max-width: 420px;
+    margin: 60px auto;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: cardPulse 3s infinite ease-in-out;
+}
+
+@keyframes cardPulse {
+    0% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; }
+    50% { box-shadow: 0 25px 70px rgba(120, 80, 200, 0.15), 0 0 0 2px rgba(180, 140, 255, 0.3) inset; }
+    100% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.5) inset; }
+}
+
+.auth-container h2 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 24px;
+    color: #4a3a6b;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* 输入框组 */
+.input-group {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 20px 14px 48px !important;
+    border: 2px solid #e8e0f0 !important;
+    border-radius: 16px !important;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.7);
+    box-sizing: border-box;
+}
+
+.input-group input:focus {
+    border-color: #a78bfa !important;
+    box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+    background: white;
+    outline: none;
+}
+
+.input-group .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #b0a0c8;
+    pointer-events: none;
+}
+
+/* 登录按钮 */
+#authSubmitBtn {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border: none;
+    border-radius: 16px !important;
+    padding: 14px !important;
+    font-size: 18px !important;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(107, 70, 193, 0.3);
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+#authSubmitBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(107, 70, 193, 0.4);
+}
+
+#authSubmitBtn:active {
+    transform: scale(0.96);
+}
+
+/* 切换按钮（去注册/去登录） */
+.switch-btn {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(107, 70, 193, 0.25);
+    margin-left: 6px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.switch-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 14px rgba(107, 70, 193, 0.35);
+}
+
+.switch-btn:active {
+    transform: scale(0.95);
+}
+
+#authSwitchText {
+    color: #6a5a7a;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.error-msg {
+    color: #f87171;
+    font-size: 14px;
+    text-align: center;
+    min-height: 24px;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 28px 20px !important;
+        margin: 30px 16px;
+        border-radius: 24px !important;
+    }
+    .floating-star, .floating-cloud, .floating-rainbow, .floating-heart {
+        font-size: 1.5rem !important;
+    }
+}
+
+
+/* ============================================================
+   2. 全局基础样式（原有）
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; max-width: 900px; margin: 20px auto; background: #f4f4f9; padding: 0 15px; }
+.card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
+.hidden { display: none !important; }
+
+.stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 10px; }
+.stats div { font-size: 18px; background: #f8f9fa; padding: 10px 20px; border-radius: 8px; }
+.income { color: #28a745; }
+.expense { color: #dc3545; }
+.balance { color: #007bff; }
+
+.form-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+input, select, button { padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
+.btn-primary { background: #007bff; color: white; border: none; cursor: pointer; }
+.btn-primary:hover { background: #0056b3; }
+.btn-danger { background: #dc3545; color: white; border: none; cursor: pointer; padding: 4px 12px; border-radius: 4px; }
+.btn-danger:hover { background: #c82333; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { background: #343a40; color: white; padding: 10px; }
+td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: center; }
+
+.logout-btn { float: right; background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+.welcome-msg { font-size: 16px; font-weight: bold; }
+.refresh-btn { margin-top: 10px; }
+
+/* 筛选栏 */
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin: 15px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+.filter-buttons { display: flex; gap: 8px; }
+.filter-btn {
+    padding: 6px 16px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.filter-btn:hover { background: #f0f0f0; }
+.filter-btn.active { background: #007bff; color: white; border-color: #007bff; }
+.search-box { flex: 1; min-width: 150px; }
+.search-box input {
+    width: 100%;
+    padding: 6px 14px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+}
+.search-box input:focus { border-color: #007bff; }
+
+/* 编辑弹窗 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.modal.hidden { display: none; }
+
+/* Toast 轻提示 */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+.toast {
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 200px;
+    text-align: center;
+    pointer-events: auto;
+    animation: toastSlideIn 0.3s ease-out, toastFadeOut 0.5s ease-in 2.5s forwards;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+@keyframes toastSlideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes toastFadeOut {
+    to { opacity: 0; transform: translateY(-20px); }
+}
+
+/* 编辑按钮 */
+.btn-edit {
+    background: #ffc107;
+    color: #333;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 4px;
+}
+
+/* 导出按钮 */
+.btn-success {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.btn-success:hover { background: #218838; }
+
+/* ===== 管理员按钮 ===== */
+.btn-admin {
+    background: #6f42c1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+.btn-admin:hover {
+    background: #5a32a3;
+}
+
+/* ===== 管理后台 Tab 栏 ===== */
+.admin-tab-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 2px solid #e8e0f0;
+}
+
+.admin-tab {
+    padding: 8px 20px;
+    border: none;
+    background: #f0edf5;
+    color: #4a3a6b;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.admin-tab:hover {
+    background: #e0d8ec;
+}
+
+.admin-tab.active {
+    background: #6f42c1;
+    color: white;
+}
+
+.admin-tab.danger {
+    background: #dc3545;
+    color: white;
+}
+.admin-tab.danger:hover {
+    background: #c82333;
+}
+
+/* ===== 用户管理表格的切换按钮 ===== */
+.btn-toggle {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+}
+.btn-toggle:hover {
+    opacity: 0.85;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>记账本 - 多用户版</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- ========== 装饰动画元素 ========== -->
+<div class="floating-elements">
+    <div class="floating-star">🌟</div>
+    <div class="floating-star">⭐</div>
+    <div class="floating-cloud">☁️</div>
+    <div class="floating-cloud">☁️</div>
+    <div class="floating-rainbow">🌈</div>
+    <div class="floating-heart">❤️</div>
+</div>
+
+<!-- ========== 登录/注册界面 ========== -->
+<div id="authContainer" class="auth-container card">
+    <h2 id="authTitle">📝 登录</h2>
+    <div id="authError" class="error-msg"></div>
+    <div class="input-group">
+        <input id="authUsername" type="text" placeholder="用户名" autocomplete="username">
+        <span class="input-icon">👤</span>
+    </div>
+    <div class="input-group">
+        <input id="authPassword" type="password" placeholder="密码" autocomplete="current-password">
+        <span class="input-icon">🔒</span>
+    </div>
+    <button id="authSubmitBtn">登录</button>
+    <div style="text-align:center; margin-top:10px;">
+        <span id="authSwitchText">还没有账号？</span>
+        <button id="authSwitchBtn" class="switch-btn">去注册</button>
+    </div>
+</div>
+
+<!-- ========== 记账主界面 ========== -->
+<div id="appContainer" class="hidden">
+
+    <!-- 顶部栏 -->
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>📒 我的记账本</h2>
+        <div>
+            <span class="welcome-msg" id="welcomeUser">欢迎你！</span>
+            <!-- 管理后台入口按钮（默认隐藏） -->
+            <button class="btn-admin" id="adminBtn" onclick="enterAdminMode()" style="display:none;">📊 管理后台</button>
+            <button class="logout-btn" onclick="logout()">退出登录</button>
+        </div>
+    </div>
+
+    <!-- ===== 管理员 Tab 栏（默认隐藏） ===== -->
+    <div id="adminModeBar" class="admin-tab-bar hidden">
+        <button class="admin-tab active" data-tab="orders" onclick="switchAdminTab('orders')">📋 账单总览</button>
+        <button class="admin-tab" data-tab="users" onclick="switchAdminTab('users')">👥 用户管理</button>
+        <button class="admin-tab danger" onclick="exitAdminMode()">✕ 退出管理</button>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="card">
+        <div class="stats">
+            <div>💰 结余: <span id="totalBalance" class="balance">0.00</span></div>
+            <div>📈 总收入: <span id="totalIncome" class="income">0.00</span></div>
+            <div>📉 总支出: <span id="totalExpense" class="expense">0.00</span></div>
+        </div>
+    </div>
+
+    <!-- 记一笔 -->
+    <div class="card">
+        <h3>✏️ 记一笔</h3>
+        <div class="form-group">
+            <select id="inputType">
+                <option value="income">💹 收入</option>
+                <option value="expense">💸 支出</option>
+            </select>
+            <input id="inputAmount" type="number" placeholder="金额" step="0.01">
+            <input id="inputRemark" placeholder="备注">
+            <button class="btn-primary" onclick="handleAdd()">✅ 添加</button>
+        </div>
+    </div>
+
+    <!-- 流水记录 + 筛选栏 -->
+    <div class="card">
+        <h3>📋 流水记录</h3>
+        <div class="filter-bar">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">📊 全部</button>
+                <button class="filter-btn" data-filter="income">💹 收入</button>
+                <button class="filter-btn" data-filter="expense">💸 支出</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 搜索备注...">
+            </div>
+        </div>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>类型</th>
+                        <th>金额</th>
+                        <th>备注</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+            <button class="btn-primary refresh-btn" onclick="loadData()">🔄 刷新</button>
+            <button class="btn-success" onclick="exportExcel()">📥 导出 Excel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== 编辑弹窗 ========== -->
+<div id="editModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✏️ 修改账单</h3>
+            <button class="modal-close-btn" onclick="closeEditModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="editId">
+            <div class="form-group">
+                <select id="editType">
+                    <option value="income">💹 收入</option>
+                    <option value="expense">💸 支出</option>
+                </select>
+                <input id="editAmount" type="number" placeholder="金额" step="0.01">
+                <input id="editRemark" placeholder="备注">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeEditModal()">取消</button>
+            <button class="btn-primary" onclick="saveEdit()">💾 保存修改</button>
+        </div>
+    </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
