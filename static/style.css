@@ -344,7 +344,7 @@ td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: center; }
     margin-right: 4px;
 }
 
-/* 导出按钮 */
+/* 导出按钮（普通用户） */
 .btn-success {
     background: #28a745;
     color: white;
@@ -356,7 +356,7 @@ td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: center; }
 }
 .btn-success:hover { background: #218838; }
 
-/* ===== 管理员按钮 ===== */
+/* ===== 管理员按钮（管理后台入口） ===== */
 .btn-admin {
     background: #6f42c1;
     color: white;
@@ -419,4 +419,26 @@ td { padding: 10px; border-bottom: 1px solid #dee2e6; text-align: center; }
 }
 .btn-toggle:hover {
     opacity: 0.85;
+}
+
+/* ===== 管理员导出按钮 ===== */
+.btn-export-admin {
+    background: linear-gradient(135deg, #6f42c1, #8b5cf6);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(107, 70, 193, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.btn-export-admin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(107, 70, 193, 0.4);
+}
+.btn-export-admin:active {
+    transform: scale(0.95);
 }

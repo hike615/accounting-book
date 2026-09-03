@@ -2,25 +2,35 @@ const API = "";
 
 // ==================== Toast 轻提示 ====================
 function showToast(message, type = 'success') {
+    //创建一个货架，用于存放提示信息
     let container = document.getElementById('toast-container');
+    //以防没有
     if (!container) {
         container = document.createElement('div');
         container.id = 'toast-container';
         document.body.appendChild(container);
     }
+    //创建一个轻提示
     const toast = document.createElement('div');
+    //设置个名字toast success 或者 toast error对于css样式的区分
     toast.className = `toast ${type}`;
+    //显示的文本
+    toast.textContent = message;
+    //将轻提示放到货架上
     toast.textContent = message;
     container.appendChild(toast);
     setTimeout(() => {
+        //.parentNode 指向父元素为货架，如果架子还在就是1，把这个提示删了
         if (toast.parentNode) {
             toast.remove();
         }
-    }, 2800);
+    }, 5200);
 }
 
 // ==================== 全局数据 ====================
+//把后端传回来的数据存起来，不可动
 let currentList = [];
+//复印一份数据，用于修改
 let filteredList = [];
 let currentAdminTab = 'orders';  // 'orders' 或 'users'
 
@@ -324,6 +334,7 @@ async function saveEdit() {
 }
 
 // ==================== 导出 Excel ====================
+// ==================== 导出 Excel（智能适配当前视图） ====================
 async function exportExcel() {
     const token = getToken();
     if (!token) {
@@ -331,8 +342,22 @@ async function exportExcel() {
         return;
     }
 
+    // 1. 判断当前是否在管理员模式，以及当前 Tab
+    const isAdmin = localStorage.getItem('is_admin') === '1';
+    const isAdminMode = document.getElementById('adminModeBar') && !document.getElementById('adminModeBar').classList.contains('hidden');
+    
+    let url = `${API}/orders/export`;  // 默认：导出自己的账单
+
+    if (isAdmin && isAdminMode) {
+        if (currentAdminTab === 'orders') {
+            url = `${API}/admin/orders/export`;   // 管理员 - 账单总览 → 导出所有用户账单
+        } else if (currentAdminTab === 'users') {
+            url = `${API}/admin/users/export`;     // 管理员 - 用户管理 → 导出用户列表
+        }
+    }
+
     try {
-        const res = await fetch(`${API}/orders/export`, {
+        const res = await fetch(url, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -357,14 +382,14 @@ async function exportExcel() {
         }
 
         const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
+        const urlObj = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url;
+        a.href = urlObj;
         a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(urlObj);
 
         showToast('✅ 导出成功！', 'success');
     } catch (e) {
@@ -393,12 +418,22 @@ document.getElementById('searchInput').addEventListener('input', function() {
 function enterAdminMode() {
     document.getElementById('adminModeBar').classList.remove('hidden');
     switchAdminTab('orders');  // 默认显示账单总览
+
+    // 👇 切换导出按钮样式
+    const exportBtn = document.getElementById('exportBtn');
+    exportBtn.className = 'btn-export-admin';
+    exportBtn.textContent = '📊 导出所有账单';
 }
 
 function exitAdminMode() {
     document.getElementById('adminModeBar').classList.add('hidden');
     // 恢复普通视图
     loadData();
+
+    // 👇 恢复导出按钮普通样式
+    const exportBtn = document.getElementById('exportBtn');
+    exportBtn.className = 'btn-success';
+    exportBtn.textContent = '📥 导出 Excel';
 }
 
 function switchAdminTab(tab) {
@@ -411,6 +446,15 @@ function switchAdminTab(tab) {
         }
     });
     
+    // 👇 根据 Tab 修改导出按钮文字
+    const exportBtn = document.getElementById('exportBtn');
+    if (tab === 'orders') {
+        exportBtn.textContent = '📊 导出所有账单';
+    } else if (tab === 'users') {
+        exportBtn.textContent = '👥 导出用户列表';
+    }
+
+
     if (tab === 'orders') {
         loadAdminOrders();
     } else if (tab === 'users') {
@@ -563,5 +607,44 @@ async function toggleUserStatus(targetUserId) {
         loadAdminUsers();
     } catch (e) {
         alert('网络错误：' + e.message);
+    }
+}
+
+
+// ==================== 管理员导出所有账单 ====================
+async function exportAdminOrdersExcel() {
+    const token = getToken();
+    if (!token) return;
+    try {
+        const res = await fetch(`${API}/admin/orders/export`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            showToast('❌ 导出失败：' + (err.detail || '未知错误'), 'error');
+            return;
+        }
+        // ... 下载逻辑（同 exportExcel）
+    } catch (e) {
+        showToast('❌ 导出失败：' + e.message, 'error');
+    }
+}
+
+// ==================== 管理员导出用户列表 ====================
+async function exportAdminUsersExcel() {
+    const token = getToken();
+    if (!token) return;
+    try {
+        const res = await fetch(`${API}/admin/users/export`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!res.ok) {
+            const err = await res.json();
+            showToast('❌ 导出失败：' + (err.detail || '未知错误'), 'error');
+            return;
+        }
+        // ... 下载逻辑（同 exportExcel）
+    } catch (e) {
+        showToast('❌ 导出失败：' + e.message, 'error');
     }
 }

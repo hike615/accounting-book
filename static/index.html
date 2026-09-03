@@ -45,7 +45,6 @@
         <h2>📒 我的记账本</h2>
         <div>
             <span class="welcome-msg" id="welcomeUser">欢迎你！</span>
-            <!-- 管理后台入口按钮（默认隐藏） -->
             <button class="btn-admin" id="adminBtn" onclick="enterAdminMode()" style="display:none;">📊 管理后台</button>
             <button class="logout-btn" onclick="logout()">退出登录</button>
         </div>
@@ -82,8 +81,9 @@
     </div>
 
     <!-- 流水记录 + 筛选栏 -->
-    <div class="card">
+    <div class="card" id="ordersCard">
         <h3>📋 流水记录</h3>
+        <!-- 筛选栏 -->
         <div class="filter-bar">
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">📊 全部</button>
@@ -94,6 +94,7 @@
                 <input type="text" id="searchInput" placeholder="🔍 搜索备注...">
             </div>
         </div>
+        <!-- 表格 -->
         <div style="overflow-x: auto;">
             <table>
                 <thead>
@@ -109,11 +110,13 @@
                 <tbody id="tableBody"></tbody>
             </table>
         </div>
+        <!-- 按钮组：刷新 + 导出（带 id 以便 JS 动态控制样式和文字） -->
         <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
             <button class="btn-primary refresh-btn" onclick="loadData()">🔄 刷新</button>
-            <button class="btn-success" onclick="exportExcel()">📥 导出 Excel</button>
+            <button class="btn-success" id="exportBtn" onclick="exportExcel()">📥 导出 Excel</button>
         </div>
     </div>
+
 </div>
 
 <!-- ========== 编辑弹窗 ========== -->
